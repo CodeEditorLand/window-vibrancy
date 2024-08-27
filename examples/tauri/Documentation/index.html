@@ -1,0 +1,84 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charset="utf-8"/><meta name="keywords" content="@playform/document"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>app-vibrancy-tauri</title><meta name="description" content="Documentation for app-vibrancy-tauri"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><link rel="stylesheet" href="assets/custom.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">app-vibrancy-tauri</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h2>app-vibrancy-tauri</h2></div><div class="tsd-panel tsd-typography"><a id="md:window-vibrancy" class="tsd-anchor"></a><h1 class="tsd-anchor-link">window-vibrancy<a href="#md:window-vibrancy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p><a href="https://crates.io/crates/window-vibrancy"><img src="https://img.shields.io/crates/v/window-vibrancy" alt=""></a>
+<a href="https://docs.rs/window-vibrancy/"><img src="https://img.shields.io/docsrs/window-vibrancy" alt=""></a>
+<img src="https://img.shields.io/crates/l/window-vibrancy" alt="">
+<a href="https://discord.gg/SpmNs4S"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg" alt="Chat Server"></a></p>
+<p>Make your windows vibrant.</p>
+<blockquote>
+<p>[!Tip] If you're using <code>tauri@v1</code>, you need to use version <code>0.4</code> of this
+crate.</p>
+</blockquote>
+<a id="md:platform-specific" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Platform-specific<a href="#md:platform-specific" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><strong>Linux</strong>: Unsupported, Blur and any vibrancy effects are controlled by the
+compositor installed on the end-user system.</li>
+</ul>
+<a id="md:example" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Example<a href="#md:example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="rs">use window_vibrancy::{apply_blur, apply_vibrancy, NSVisualEffectMaterial};
+
+#[cfg(target_os = "macos")]
+apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, None).expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+
+#[cfg(target_os = "windows")]
+apply_blur(&window, Some((18, 18, 18, 125))).expect("Unsupported platform! 'apply_blur' is only supported on Windows");
+</code><button type="button">Copy</button></pre>
+
+<a id="md:tauri" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Tauri<a href="#md:tauri" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>if you are using tauri, don't forget to:</p>
+<ul>
+<li>set <code>html, body { background: transparent }</code> see
+<a href="https://github.com/tauri-apps/window-vibrancy/blob/dev/examples/tauri/public/index.html#L12">index.html#L12</a></li>
+<li>set <code>&quot;windows&quot;: [ { &quot;transparent&quot;: true } ]</code> see
+<a href="https://github.com/tauri-apps/window-vibrancy/blob/dev/examples/tauri/src-tauri/tauri.conf.json#L57">tauri.conf.json#L57</a></li>
+<li>on <strong>macos</strong> set <code>&quot;macOSPrivateApi&quot;: true</code> see
+<a href="https://github.com/tauri-apps/window-vibrancy/blob/dev/examples/tauri/src-tauri/tauri.conf.json#L49">tauri.conf.json#L49</a></li>
+</ul>
+<p>For a more complete example of usage with <a href="https://tauri.app/">tauri</a>, see
+<a href="https://github.com/tauri-apps/window-vibrancy/tree/dev/examples/tauri"><code>examples/tauri</code></a>.</p>
+<a id="md:available-functions" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Available functions<a href="#md:available-functions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Function</th>
+<th style="text-align:center">Supported platforms</th>
+<th style="text-align:left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>apply_blur</code>&amp;<code>clear_blur</code></td>
+<td style="text-align:center">Windows 7/10/11 (22H1 only)</td>
+<td style="text-align:left">Bad performance when resizing/dragging the window on Windows 11 build 22621.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>apply_acrylic</code>&amp;<code>clear_acrylic</code></td>
+<td style="text-align:center">Windows 10/11</td>
+<td style="text-align:left">Bad performance when resizing/dragging the window on Windows 10 v1903+ and Windows 11 build 22000.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>apply_mica</code>&amp;<code>clear_mica</code></td>
+<td style="text-align:center">Windows 11</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>apply_vibrancy</code></td>
+<td style="text-align:center">macOS 10.10 and newer</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<a id="md:screenshots" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Screenshots<a href="#md:screenshots" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p align="center">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">apply_blur</th>
+<th style="text-align:center">apply_acrylic</th>
+<th style="text-align:center">apply_mica</th>
+<th style="text-align:center">apply_vibrancy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="media/apply_blur.png" alt="apply_blur screenshot"></td>
+<td style="text-align:center"><img src="media/apply_acrylic.png" alt="apply_blur screenshot"></td>
+<td style="text-align:center"><img src="media/apply_mica.png" alt="apply_mica screenshot"></td>
+<td style="text-align:center"><img src="media/apply_vibrancy.png" alt="apply_vibrancy screenshot"></td>
+</tr>
+</tbody>
+</table>
+</p></div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#md:window-vibrancy"><span>window-<wbr/>vibrancy</span></a><ul><li><a href="#md:platform-specific"><span>Platform-<wbr/>specific</span></a></li><li><a href="#md:example"><span>Example</span></a></li><li><a href="#md:tauri"><span>Tauri</span></a></li><li><a href="#md:available-functions"><span>Available functions</span></a></li><li><a href="#md:screenshots"><span>Screenshots</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="assets/icons.svg#icon-1"></use></svg><span>app-vibrancy-tauri</span></a><ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="."><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
