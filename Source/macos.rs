@@ -12,16 +12,30 @@
 pub enum NSVisualEffectMaterial {
 	#[deprecated(
 		since = "macOS 10.14",
-		note = "A default material appropriate for the view's effectiveAppearance.  You should instead choose an appropriate semantic material."
+		note = "A default material appropriate for the view's \
+		        effectiveAppearance.  You should instead choose an \
+		        appropriate semantic material."
 	)]
 	AppearanceBased = 0,
-	#[deprecated(since = "macOS 10.14", note = "Use a semantic material instead.")]
+	#[deprecated(
+		since = "macOS 10.14",
+		note = "Use a semantic material instead."
+	)]
 	Light = 1,
-	#[deprecated(since = "macOS 10.14", note = "Use a semantic material instead.")]
+	#[deprecated(
+		since = "macOS 10.14",
+		note = "Use a semantic material instead."
+	)]
 	Dark = 2,
-	#[deprecated(since = "macOS 10.14", note = "Use a semantic material instead.")]
+	#[deprecated(
+		since = "macOS 10.14",
+		note = "Use a semantic material instead."
+	)]
 	MediumLight = 8,
-	#[deprecated(since = "macOS 10.14", note = "Use a semantic material instead.")]
+	#[deprecated(
+		since = "macOS 10.14",
+		note = "Use a semantic material instead."
+	)]
 	UltraDark = 9,
 
 	/// macOS 10.10+
@@ -77,9 +91,17 @@ mod internal {
 	use std::{ffi::c_void, ptr::NonNull};
 
 	use objc2_app_kit::{
-		NSAppKitVersionNumber, NSAppKitVersionNumber10_10, NSAppKitVersionNumber10_11,
-		NSAppKitVersionNumber10_14, NSAutoresizingMaskOptions, NSView, NSVisualEffectBlendingMode,
-		NSVisualEffectMaterial, NSVisualEffectState, NSVisualEffectView, NSWindowOrderingMode,
+		NSAppKitVersionNumber,
+		NSAppKitVersionNumber10_10,
+		NSAppKitVersionNumber10_11,
+		NSAppKitVersionNumber10_14,
+		NSAutoresizingMaskOptions,
+		NSView,
+		NSVisualEffectBlendingMode,
+		NSVisualEffectMaterial,
+		NSVisualEffectState,
+		NSVisualEffectView,
+		NSWindowOrderingMode,
 	};
 	use objc2_foundation::{CGFloat, MainThreadMarker};
 
@@ -87,37 +109,42 @@ mod internal {
 
 	#[allow(deprecated)]
 	pub unsafe fn apply_vibrancy(
-		ns_view: NonNull<c_void>,
-		appearance: super::NSVisualEffectMaterial,
-		state: Option<super::NSVisualEffectState>,
-		radius: Option<f64>,
+		ns_view:NonNull<c_void>,
+		appearance:super::NSVisualEffectMaterial,
+		state:Option<super::NSVisualEffectState>,
+		radius:Option<f64>,
 	) -> Result<(), Error> {
 		let mtm = MainThreadMarker::new().ok_or(Error::NotMainThread(
 			"\"apply_vibrancy()\" can only be used on the main thread.",
 		))?;
 
 		unsafe {
-			let view: &NSView = ns_view.cast().as_ref();
+			let view:&NSView = ns_view.cast().as_ref();
 
 			if NSAppKitVersionNumber < NSAppKitVersionNumber10_10 {
 				return Err(Error::UnsupportedPlatformVersion(
-					"\"apply_vibrancy()\" is only available on macOS 10.0 or newer.",
+					"\"apply_vibrancy()\" is only available on macOS 10.0 or \
+					 newer.",
 				));
 			}
 
 			let mut m = NSVisualEffectMaterial(appearance as isize);
-			if (appearance as u32 > 9 && NSAppKitVersionNumber < NSAppKitVersionNumber10_14)
-				|| (appearance as u32 > 4 && NSAppKitVersionNumber < NSAppKitVersionNumber10_11)
+			if (appearance as u32 > 9
+				&& NSAppKitVersionNumber < NSAppKitVersionNumber10_14)
+				|| (appearance as u32 > 4
+					&& NSAppKitVersionNumber < NSAppKitVersionNumber10_11)
 			{
 				m = NSVisualEffectMaterial::AppearanceBased;
 			}
 
 			let bounds = view.bounds();
-			let blurred_view = NSVisualEffectView::initWithFrame(mtm.alloc(), bounds);
+			let blurred_view =
+				NSVisualEffectView::initWithFrame(mtm.alloc(), bounds);
 
 			blurred_view.setMaterial(m);
 			set_corner_radius(&blurred_view, radius.unwrap_or(0.0));
-			blurred_view.setBlendingMode(NSVisualEffectBlendingMode::BehindWindow);
+			blurred_view
+				.setBlendingMode(NSVisualEffectBlendingMode::BehindWindow);
 			blurred_view.setState(
 				state
 					.map(|state| NSVisualEffectState(state as isize))
@@ -138,7 +165,7 @@ mod internal {
 	}
 
 	// TODO: Does not seem to be public?
-	fn set_corner_radius(view: &NSVisualEffectView, radius: CGFloat) {
+	fn set_corner_radius(view:&NSVisualEffectView, radius:CGFloat) {
 		unsafe { objc2::msg_send![view, setCornerRadius: radius] }
 	}
 }
