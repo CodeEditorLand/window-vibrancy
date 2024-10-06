@@ -12,14 +12,16 @@
 //! # Example
 //!
 //! ```no_run
-//! use window_vibrancy::{apply_vibrancy, apply_blur, NSVisualEffectMaterial};
+//! use window_vibrancy::{apply_blur, apply_vibrancy, NSVisualEffectMaterial};
 //!
 //! # let window: &dyn raw_window_handle::HasWindowHandle = unsafe { std::mem::zeroed() };
 //! #[cfg(target_os = "macos")]
-//! apply_vibrancy(&window, NSVisualEffectMaterial::AppearanceBased, None, None).expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+//! apply_vibrancy(&window, NSVisualEffectMaterial::AppearanceBased, None, None)
+//! 	.expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
 //!
 //! #[cfg(target_os = "windows")]
-//! apply_blur(&window, Some((18, 18, 18, 125))).expect("Unsupported platform! 'apply_blur' is only supported on Windows");
+//! apply_blur(&window, Some((18, 18, 18, 125)))
+//! 	.expect("Unsupported platform! 'apply_blur' is only supported on Windows");
 //! ```
 
 #![allow(clippy::deprecated_semver)]
@@ -55,11 +57,7 @@ pub fn apply_blur(
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
 			windows::apply_blur(handle.hwnd.get() as _, color)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"apply_blur()\" is only supported on Windows.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"apply_blur()\" is only supported on Windows.")),
 	}
 }
 
@@ -69,19 +67,11 @@ pub fn apply_blur(
 /// ## Platform-specific
 ///
 /// - **Linux / macOS**: Unsupported.
-pub fn clear_blur(
-	window:impl raw_window_handle::HasWindowHandle,
-) -> Result<(), Error> {
+pub fn clear_blur(window:impl raw_window_handle::HasWindowHandle) -> Result<(), Error> {
 	match window.window_handle()?.as_raw() {
 		#[cfg(target_os = "windows")]
-		raw_window_handle::RawWindowHandle::Win32(handle) => {
-			windows::clear_blur(handle.hwnd.get() as _)
-		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"clear_blur()\" is only supported on Windows.",
-			))
-		},
+		raw_window_handle::RawWindowHandle::Win32(handle) => windows::clear_blur(handle.hwnd.get() as _),
+		_ => Err(Error::UnsupportedPlatform("\"clear_blur()\" is only supported on Windows.")),
 	}
 }
 
@@ -107,11 +97,7 @@ pub fn apply_acrylic(
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
 			windows::apply_acrylic(handle.hwnd.get() as _, color)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"apply_acrylic()\" is only supported on Windows.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"apply_acrylic()\" is only supported on Windows.")),
 	}
 }
 
@@ -121,19 +107,13 @@ pub fn apply_acrylic(
 /// ## Platform-specific
 ///
 /// - **Linux / macOS**: Unsupported.
-pub fn clear_acrylic(
-	window:impl raw_window_handle::HasWindowHandle,
-) -> Result<(), Error> {
+pub fn clear_acrylic(window:impl raw_window_handle::HasWindowHandle) -> Result<(), Error> {
 	match window.window_handle()?.as_raw() {
 		#[cfg(target_os = "windows")]
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
 			windows::clear_acrylic(handle.hwnd.get() as _)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"clear_acrylic()\" is only supported on Windows.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"clear_acrylic()\" is only supported on Windows.")),
 	}
 }
 
@@ -157,11 +137,7 @@ pub fn apply_mica(
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
 			windows::apply_mica(handle.hwnd.get() as _, dark)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"apply_mica()\" is only supported on Windows.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"apply_mica()\" is only supported on Windows.")),
 	}
 }
 
@@ -170,19 +146,11 @@ pub fn apply_mica(
 /// ## Platform-specific
 ///
 /// - **Linux / macOS**: Unsupported.
-pub fn clear_mica(
-	window:impl raw_window_handle::HasWindowHandle,
-) -> Result<(), Error> {
+pub fn clear_mica(window:impl raw_window_handle::HasWindowHandle) -> Result<(), Error> {
 	match window.window_handle()?.as_raw() {
 		#[cfg(target_os = "windows")]
-		raw_window_handle::RawWindowHandle::Win32(handle) => {
-			windows::clear_mica(handle.hwnd.get() as _)
-		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"clear_mica()\" is only supported on Windows.",
-			))
-		},
+		raw_window_handle::RawWindowHandle::Win32(handle) => windows::clear_mica(handle.hwnd.get() as _),
+		_ => Err(Error::UnsupportedPlatform("\"clear_mica()\" is only supported on Windows.")),
 	}
 }
 
@@ -206,11 +174,7 @@ pub fn apply_tabbed(
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
 			windows::apply_tabbed(handle.hwnd.get() as _, dark)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"apply_tabbed()\" is only supported on Windows.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"apply_tabbed()\" is only supported on Windows.")),
 	}
 }
 
@@ -219,19 +183,13 @@ pub fn apply_tabbed(
 /// ## Platform-specific
 ///
 /// - **Linux / macOS**: Unsupported.
-pub fn clear_tabbed(
-	window:impl raw_window_handle::HasWindowHandle,
-) -> Result<(), Error> {
+pub fn clear_tabbed(window:impl raw_window_handle::HasWindowHandle) -> Result<(), Error> {
 	match window.window_handle()?.as_raw() {
 		#[cfg(target_os = "windows")]
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
 			windows::clear_tabbed(handle.hwnd.get() as _)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"clear_tabbed()\" is only supported on Windows.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"clear_tabbed()\" is only supported on Windows.")),
 	}
 }
 
@@ -251,11 +209,7 @@ pub fn apply_vibrancy(
 		raw_window_handle::RawWindowHandle::AppKit(handle) => unsafe {
 			macos::apply_vibrancy(handle.ns_view, effect, state, radius)
 		},
-		_ => {
-			Err(Error::UnsupportedPlatform(
-				"\"apply_vibrancy()\" is only supported on macOS.",
-			))
-		},
+		_ => Err(Error::UnsupportedPlatform("\"apply_vibrancy()\" is only supported on macOS.")),
 	}
 }
 
@@ -285,7 +239,5 @@ impl std::fmt::Display for Error {
 impl std::error::Error for Error {}
 
 impl From<raw_window_handle::HandleError> for Error {
-	fn from(err:raw_window_handle::HandleError) -> Self {
-		Error::NoWindowHandle(err)
-	}
+	fn from(err:raw_window_handle::HandleError) -> Self { Error::NoWindowHandle(err) }
 }

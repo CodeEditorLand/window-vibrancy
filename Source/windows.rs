@@ -9,11 +9,7 @@
 
 use std::ffi::c_void;
 
-pub use windows_sys::Win32::{
-	Foundation::*,
-	Graphics::Dwm::*,
-	System::LibraryLoader::*,
-};
+pub use windows_sys::Win32::{Foundation::*, Graphics::Dwm::*, System::LibraryLoader::*};
 
 use crate::{Color, Error};
 
@@ -30,16 +26,12 @@ pub fn apply_blur(hwnd:HWND, color:Option<Color>) -> Result<(), Error> {
 		}
 	} else if is_swca_supported() {
 		unsafe {
-			SetWindowCompositionAttribute(
-				hwnd,
-				ACCENT_STATE::ACCENT_ENABLE_BLURBEHIND,
-				color,
-			);
+			SetWindowCompositionAttribute(hwnd, ACCENT_STATE::ACCENT_ENABLE_BLURBEHIND, color);
 		}
 	} else {
 		return Err(Error::UnsupportedPlatformVersion(
-			"\"apply_blur()\" is only available on Windows 7, Windows 10 \
-			 v1809 or newer and Windows 11.",
+			"\"apply_blur()\" is only available on Windows 7, Windows 10 v1809 or newer and \
+			 Windows 11.",
 		));
 	}
 	Ok(())
@@ -58,16 +50,12 @@ pub fn clear_blur(hwnd:HWND) -> Result<(), Error> {
 		}
 	} else if is_swca_supported() {
 		unsafe {
-			SetWindowCompositionAttribute(
-				hwnd,
-				ACCENT_STATE::ACCENT_DISABLED,
-				None,
-			);
+			SetWindowCompositionAttribute(hwnd, ACCENT_STATE::ACCENT_DISABLED, None);
 		}
 	} else {
 		return Err(Error::UnsupportedPlatformVersion(
-			"\"clear_blur()\" is only available on Windows 7, Windows 10 \
-			 v1809 or newer and Windows 11.",
+			"\"clear_blur()\" is only available on Windows 7, Windows 10 v1809 or newer and \
+			 Windows 11.",
 		));
 	}
 	Ok(())
@@ -79,8 +67,7 @@ pub fn apply_acrylic(hwnd:HWND, color:Option<Color>) -> Result<(), Error> {
 			DwmSetWindowAttribute(
 				hwnd,
 				DWMWA_SYSTEMBACKDROP_TYPE as _,
-				&DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW as *const _
-					as _,
+				&DWM_SYSTEMBACKDROP_TYPE::DWMSBT_TRANSIENTWINDOW as *const _ as _,
 				4,
 			);
 		}
@@ -94,8 +81,7 @@ pub fn apply_acrylic(hwnd:HWND, color:Option<Color>) -> Result<(), Error> {
 		}
 	} else {
 		return Err(Error::UnsupportedPlatformVersion(
-			"\"apply_acrylic()\" is only available on Windows 10 v1809 or \
-			 newer and Windows 11.",
+			"\"apply_acrylic()\" is only available on Windows 10 v1809 or newer and Windows 11.",
 		));
 	}
 	Ok(())
@@ -113,16 +99,11 @@ pub fn clear_acrylic(hwnd:HWND) -> Result<(), Error> {
 		}
 	} else if is_swca_supported() {
 		unsafe {
-			SetWindowCompositionAttribute(
-				hwnd,
-				ACCENT_STATE::ACCENT_DISABLED,
-				None,
-			);
+			SetWindowCompositionAttribute(hwnd, ACCENT_STATE::ACCENT_DISABLED, None);
 		}
 	} else {
 		return Err(Error::UnsupportedPlatformVersion(
-			"\"clear_acrylic()\" is only available on Windows 10 v1809 or \
-			 newer and Windows 11.",
+			"\"clear_acrylic()\" is only available on Windows 10 v1809 or newer and Windows 11.",
 		));
 	}
 	Ok(())
@@ -151,12 +132,7 @@ pub fn apply_mica(hwnd:HWND, dark:Option<bool>) -> Result<(), Error> {
 		}
 	} else if is_undocumented_mica_supported() {
 		unsafe {
-			DwmSetWindowAttribute(
-				hwnd,
-				DWMWA_MICA_EFFECT as _,
-				&1 as *const _ as _,
-				4,
-			);
+			DwmSetWindowAttribute(hwnd, DWMWA_MICA_EFFECT as _, &1 as *const _ as _, 4);
 		}
 	} else {
 		return Err(Error::UnsupportedPlatformVersion(
@@ -178,12 +154,7 @@ pub fn clear_mica(hwnd:HWND) -> Result<(), Error> {
 		}
 	} else if is_undocumented_mica_supported() {
 		unsafe {
-			DwmSetWindowAttribute(
-				hwnd,
-				DWMWA_MICA_EFFECT as _,
-				&0 as *const _ as _,
-				4,
-			);
+			DwmSetWindowAttribute(hwnd, DWMWA_MICA_EFFECT as _, &0 as *const _ as _, 4);
 		}
 	} else {
 		return Err(Error::UnsupportedPlatformVersion(
@@ -254,12 +225,7 @@ fn get_function_impl(library:&str, function:&str) -> Option<FARPROC> {
 macro_rules! get_function {
 	($lib:expr, $func:ident) => {
 		get_function_impl(concat!($lib, '\0'), concat!(stringify!($func), '\0'))
-			.map(|f| {
-				std::mem::transmute::<
-					::windows_sys::Win32::Foundation::FARPROC,
-					$func,
-				>(f)
-			})
+			.map(|f| std::mem::transmute::<::windows_sys::Win32::Foundation::FARPROC, $func>(f))
 	};
 }
 
@@ -288,23 +254,16 @@ enum ACCENT_STATE {
 	ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
 }
 
-unsafe fn SetWindowCompositionAttribute(
-	hwnd:HWND,
-	accent_state:ACCENT_STATE,
-	color:Option<Color>,
-) {
-	type SetWindowCompositionAttribute = unsafe extern "system" fn(
-		HWND,
-		*mut WINDOWCOMPOSITIONATTRIBDATA,
-	) -> BOOL;
+unsafe fn SetWindowCompositionAttribute(hwnd:HWND, accent_state:ACCENT_STATE, color:Option<Color>) {
+	type SetWindowCompositionAttribute =
+		unsafe extern "system" fn(HWND, *mut WINDOWCOMPOSITIONATTRIBDATA) -> BOOL;
 
 	if let Some(set_window_composition_attribute) =
 		get_function!("user32.dll", SetWindowCompositionAttribute)
 	{
 		let mut color = color.unwrap_or_default();
 
-		let is_acrylic =
-			accent_state == ACCENT_STATE::ACCENT_ENABLE_ACRYLICBLURBEHIND;
+		let is_acrylic = accent_state == ACCENT_STATE::ACCENT_ENABLE_ACRYLICBLURBEHIND;
 		if is_acrylic && color.3 == 0 {
 			// acrylic doesn't like to have 0 alpha
 			color.3 = 1;
