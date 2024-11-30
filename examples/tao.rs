@@ -5,6 +5,7 @@
 fn main() {
 	#[cfg(target_os = "windows")]
 	use tao::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
+
 	use tao::{
 		event::{ElementState, Event, MouseButton, WindowEvent},
 		event_loop::{ControlFlow, EventLoop},
@@ -21,6 +22,7 @@ fn main() {
 	{
 		builder = builder.with_undecorated_shadow(false);
 	}
+
 	let window = builder.build(&event_loop).unwrap();
 
 	#[cfg(target_os = "windows")]
@@ -33,6 +35,7 @@ fn main() {
 
 	#[cfg(target_os = "windows")]
 	window.set_undecorated_shadow(true);
+
 	window.set_title("A fantastic window!");
 
 	event_loop.run(move |event, _, control_flow| {

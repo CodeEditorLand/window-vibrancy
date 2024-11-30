@@ -21,6 +21,7 @@ pub fn apply_blur(hwnd:HWND, color:Option<Color>) -> Result<(), Error> {
 			hRgnBlur:std::ptr::null_mut(),
 			fTransitionOnMaximized:0,
 		};
+
 		unsafe {
 			let _ = DwmEnableBlurBehindWindow(hwnd, &bb);
 		}
@@ -34,6 +35,7 @@ pub fn apply_blur(hwnd:HWND, color:Option<Color>) -> Result<(), Error> {
 			 Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -45,6 +47,7 @@ pub fn clear_blur(hwnd:HWND) -> Result<(), Error> {
 			hRgnBlur:std::ptr::null_mut(),
 			fTransitionOnMaximized:0,
 		};
+
 		unsafe {
 			let _ = DwmEnableBlurBehindWindow(hwnd, &bb);
 		}
@@ -58,6 +61,7 @@ pub fn clear_blur(hwnd:HWND) -> Result<(), Error> {
 			 Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -84,6 +88,7 @@ pub fn apply_acrylic(hwnd:HWND, color:Option<Color>) -> Result<(), Error> {
 			"\"apply_acrylic()\" is only available on Windows 10 v1809 or newer and Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -106,6 +111,7 @@ pub fn clear_acrylic(hwnd:HWND) -> Result<(), Error> {
 			"\"clear_acrylic()\" is only available on Windows 10 v1809 or newer and Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -139,6 +145,7 @@ pub fn apply_mica(hwnd:HWND, dark:Option<bool>) -> Result<(), Error> {
 			"\"apply_mica()\" is only available on Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -161,6 +168,7 @@ pub fn clear_mica(hwnd:HWND) -> Result<(), Error> {
 			"\"clear_mica()\" is only available on Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -190,6 +198,7 @@ pub fn apply_tabbed(hwnd:HWND, dark:Option<bool>) -> Result<(), Error> {
 			"\"apply_tabbed()\" is only available on Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
@@ -208,17 +217,21 @@ pub fn clear_tabbed(hwnd:HWND) -> Result<(), Error> {
 			"\"clear_tabbed()\" is only available on Windows 11.",
 		));
 	}
+
 	Ok(())
 }
 
 fn get_function_impl(library:&str, function:&str) -> Option<FARPROC> {
 	assert_eq!(library.chars().last(), Some('\0'));
+
 	assert_eq!(function.chars().last(), Some('\0'));
 
 	let module = unsafe { LoadLibraryA(library.as_ptr()) };
+
 	if module.is_null() {
 		return None;
 	}
+
 	Some(unsafe { GetProcAddress(module, function.as_ptr()) })
 }
 
@@ -264,6 +277,7 @@ unsafe fn SetWindowCompositionAttribute(hwnd:HWND, accent_state:ACCENT_STATE, co
 		let mut color = color.unwrap_or_default();
 
 		let is_acrylic = accent_state == ACCENT_STATE::ACCENT_ENABLE_ACRYLICBLURBEHIND;
+
 		if is_acrylic && color.3 == 0 {
 			// acrylic doesn't like to have 0 alpha
 			color.3 = 1;
@@ -303,11 +317,13 @@ enum DWM_SYSTEMBACKDROP_TYPE {
 
 fn is_win7() -> bool {
 	let v = windows_version::OsVersion::current();
+
 	v.major == 6 && v.minor == 1
 }
 
 fn is_at_least_build(build:u32) -> bool {
 	let v = windows_version::OsVersion::current();
+
 	v.build >= build
 }
 

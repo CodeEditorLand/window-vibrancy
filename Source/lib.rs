@@ -132,6 +132,7 @@ pub fn apply_mica(
 ) -> Result<(), Error> {
 	#[cfg(not(target_os = "windows"))]
 	let _ = dark;
+
 	match window.window_handle()?.as_raw() {
 		#[cfg(target_os = "windows")]
 		raw_window_handle::RawWindowHandle::Win32(handle) => {
@@ -169,6 +170,7 @@ pub fn apply_tabbed(
 ) -> Result<(), Error> {
 	#[cfg(not(target_os = "windows"))]
 	let _ = dark;
+
 	match window.window_handle()?.as_raw() {
 		#[cfg(target_os = "windows")]
 		raw_window_handle::RawWindowHandle::Win32(handle) => {

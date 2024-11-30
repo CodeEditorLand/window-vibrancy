@@ -90,6 +90,7 @@ mod internal {
 		NSVisualEffectView,
 		NSWindowOrderingMode,
 	};
+
 	use objc2_foundation::{CGFloat, MainThreadMarker};
 
 	use crate::Error;
@@ -115,6 +116,7 @@ mod internal {
 			}
 
 			let mut m = NSVisualEffectMaterial(appearance as isize);
+
 			if (appearance as u32 > 9 && NSAppKitVersionNumber < NSAppKitVersionNumber10_14)
 				|| (appearance as u32 > 4 && NSAppKitVersionNumber < NSAppKitVersionNumber10_11)
 			{
@@ -122,16 +124,21 @@ mod internal {
 			}
 
 			let bounds = view.bounds();
+
 			let blurred_view = NSVisualEffectView::initWithFrame(mtm.alloc(), bounds);
 
 			blurred_view.setMaterial(m);
+
 			set_corner_radius(&blurred_view, radius.unwrap_or(0.0));
+
 			blurred_view.setBlendingMode(NSVisualEffectBlendingMode::BehindWindow);
+
 			blurred_view.setState(
 				state
 					.map(|state| NSVisualEffectState(state as isize))
 					.unwrap_or(NSVisualEffectState::FollowsWindowActiveState),
 			);
+
 			blurred_view.setAutoresizingMask(
 				NSAutoresizingMaskOptions::NSViewWidthSizable
 					| NSAutoresizingMaskOptions::NSViewHeightSizable,
@@ -143,6 +150,7 @@ mod internal {
 				None,
 			);
 		}
+
 		Ok(())
 	}
 
