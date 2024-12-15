@@ -7,7 +7,6 @@ fn main() {
 	use window_vibrancy::*;
 	#[cfg(target_os = "windows")]
 	use winit::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
-
 	use winit::{
 		event::{ElementState, Event, MouseButton, WindowEvent},
 		event_loop::{ControlFlow, EventLoop},

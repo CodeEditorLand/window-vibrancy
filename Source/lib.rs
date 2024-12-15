@@ -12,7 +12,7 @@
 //! # Example
 //!
 //! ```no_run
-//! use window_vibrancy::{apply_blur, apply_vibrancy, NSVisualEffectMaterial};
+//! use window_vibrancy::{NSVisualEffectMaterial, apply_blur, apply_vibrancy};
 //!
 //! # let window: &dyn raw_window_handle::HasWindowHandle = unsafe { std::mem::zeroed() };
 //! #[cfg(target_os = "macos")]

@@ -90,7 +90,6 @@ mod internal {
 		NSVisualEffectView,
 		NSWindowOrderingMode,
 	};
-
 	use objc2_foundation::{CGFloat, MainThreadMarker};
 
 	use crate::Error;

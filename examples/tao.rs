@@ -5,7 +5,6 @@
 fn main() {
 	#[cfg(target_os = "windows")]
 	use tao::platform::windows::{WindowBuilderExtWindows, WindowExtWindows};
-
 	use tao::{
 		event::{ElementState, Event, MouseButton, WindowEvent},
 		event_loop::{ControlFlow, EventLoop},
